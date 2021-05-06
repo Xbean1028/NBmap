@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <!--对内比较部分-->
+		<meta charset="utf-8" />
+		<title>品类分析-表格模式-对内比较</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link rel="stylesheet" href="../../static/goodsapp/css/reset.css" />
+		<link rel="stylesheet" href="../../static/goodsapp/css/all.min.css" />
+		<link rel="stylesheet" href="../../static/goodsapp/css/0101.css" />
+
+	</head>
+	<body style="min-width: 1349px">
+		<!--整体部分-->
+		<div>
+			<!--创建头部div-->
+			<div class="top-bar w">
+				<!--创建导航栏-->
+				<div class="top-menu">
+					<!--创建菜单-->
+					<ul class="nav">
+						<li><a href="#" class="curent">品类分析</a></li>
+						<li><a href="#" class="other">单品分析</a></li>
+						<li><a href="#" class="other">商品及网址</a></li>
+						<li><a href="#" class="other">销售数据</a></li>
+						<li><a href="#" class="other">单品销售数据</a></li>
+						<li><a href="#" class="other">成本核算基准</a></li>
+					</ul>
+				</div>
+
+<!-- 				logo
+				<h1 class="logo">
+					<a href="/">首页</a>
+				</h1> -->
+
+				<!--用户信息-->
+				<div class="user-info">
+					<a href="/goodsapp/exit">
+						退出
+					</a>
+				</div>
+			</div>
+
+			<!--创建搜索导航栏-->
+			<div class="search-wrapper w">
+
+				<form class="search" action="/goodsapp/code_search0101/" method="POST">
+				    <input class="search-inp" type="text"  name="number" placeholder="搜索框（编号搜索）">
+				    <button class="search-btn">
+						编号搜索
+				    </button>
+
+                    <input class="search-inp" type="number" placeholder="输入天数（整数）" min="0" max="3650" name="days">
+				    <button class="search-btn">
+						日期搜索
+				    </button>
+				</form>
+
+
+				<div class="add-new">
+					<a href="/goodsapp/index0101" target="_blank">+添加窗口</a>
+				</div>
+				<div class="swith">
+					<a href="/goodsapp/index0102">切换图标模式</a>
+				</div>
+
+                <div class="add-new">
+					<a href="/goodsapp/index0103">切换为对外比较</a>
+				</div>
+
+			</div>
+
+            <!--主体-->
+			<div class="subject">
+                {% for key in contacts %}
+				<table>
+					<tr>
+					    <td class="td-1" colspan="2">{{  key.0 }}</td>
+					</tr>
+					<tr>
+					    <td class="td-2">{{ key.1 }}</td>
+                        {% if key.3 == '↑' %}
+					    <td class="td-2">{{ key.2 }}</td>
+                        {% else %}
+                        <td class="td-3">{{ key.2 }}</td>
+                        {% endif %}
+					</tr>
+
+                </table>
+
+                {% empty %}
+                 <h1 class="h">没有数据...这个操作不太行</h1>
+                {% endfor %}
+			</div>
+
+
+            </div>
+
+		</div>
+	</body>
+</html>
