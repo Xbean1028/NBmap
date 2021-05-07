@@ -9,5 +9,7 @@ urlpatterns = [
     url('index03',views.index03),
     url('check',views.check),
     url('getAllData',views.getAllData),
-    url('getLastData',views.getLastData)
+    url('getLastData',views.getLastData),
+    url('getUserInfo',views.getUserInfo),
+    url('getDevInfo',views.getDevInfo)
 ]

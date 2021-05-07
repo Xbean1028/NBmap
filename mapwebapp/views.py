@@ -122,6 +122,45 @@ def getLastData(request):
         }
     return HttpResponse(json.dumps(redata))
 
+def getUserInfo(request):
+
+    if request.method == 'GET':
+        re_name = request.GET.get('name')
+        User_obj = User.objects.filter(user_id=re_name,isDelete=0).first()
+        datas = []
+        if User_obj:
+            datas.append({'user_id':User_obj.user_id,'user_name':User_obj.user_name,'user_email':User_obj.user_eamil,'user_tel':User_obj.user_tel,'isDelete':User_obj.isDelete})
+        redata = {
+            'code': 'OK',
+            'datas': datas,
+            'length':len(datas)
+        }
+    else:
+        redata = {
+            'code': 'ERROR'
+        }
+    return HttpResponse(json.dumps(redata))
+
+def getDevInfo(request):
+
+    if request.method == 'GET':
+        re_name = request.GET.get('name')
+        User_obj = User.objects.filter(user_id=re_name,isDelete=0)
+        Dev_obj = Derive.objects.filter(user=re_name,isDelete=0)
+        datas = []
+        if len(Dev_obj) != 0:
+            for dev in Dev_obj:
+                datas.append({'dev_id':dev.dev_id,'insert_time':dev.insert_time.strftime('%Y-%m-%d %H:%M:%S'),'user_id':dev.user_id,'dev_state':dev.dev_state,'isDelete':dev.isDelete})
+        redata = {
+            'code': 'OK',
+            'datas': datas,
+            'length':len(datas)
+        }
+    else:
+        redata = {
+            'code': 'ERROR'
+        }
+    return HttpResponse(json.dumps(redata))
 
 def index03(request):
     return None
