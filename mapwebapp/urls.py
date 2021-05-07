@@ -6,5 +6,6 @@ from mapwebapp import views
 # from mapwebapp import web_views
 urlpatterns = [
     url('checking', views.checking),
-    url('index03',views.index03)
+    url('index03',views.index03),
+    url('check',views.check)
 ]

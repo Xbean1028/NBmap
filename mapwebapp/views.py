@@ -1,7 +1,21 @@
+from django.http import HttpResponse
 from django.shortcuts import render
+from mapwebapp.models import User, Derive,Data,Setting
+from rest_framework import viewsets
+import json
+from .serializers import UserSerializer, DeriveSerializer,DataSerializer,SettingSerializer
 from django.views.decorators.csrf import csrf_exempt
-@csrf_exempt
+# @csrf_exempt
+
 # Create your views here.
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    # permission_classes = [permissions.IsAuthenticated]
 
 #登录界面
 def login(request):
@@ -33,6 +47,34 @@ def checking(request):
     #     print(otherStyleTime2)
     return render(request, 'mapwebapp/03-index.html')
 
+def check(request):
+    if request.method == 'GET':
+        re_name = request.GET.get('name');
+        re_pass = request.GET.get('pass');
+        User_obj = User.objects.filter(user_id=re_name,user_pass=re_pass)
+        Dev_obj = Derive.objects.filter(user=re_name)
+        devs = []
+        if len(Dev_obj)!=0:
+            for dev in Dev_obj:
+                devs.append({'value':dev.dev_id})
+        # devstr = ''.join(devs)
+        if User_obj:
+            data ={
+                'code':'OK',
+                'dev':devs
+            }
+        else:
+            data = {
+                'code': 'ERROR'
+            }
+
+    # data = {
+    #     'patient_name': '张三',
+    #     'age': '25',
+    #     'patient_id': '19000347',
+    #     '诊断': '上呼吸道感染',
+    # }
+    return HttpResponse(json.dumps(data))
 
 def index03(request):
     return None
