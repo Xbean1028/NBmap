@@ -48,9 +48,12 @@ def checking(request):
     return render(request, 'mapwebapp/03-index.html')
 
 def check(request):
+    data = {
+        'code': 'ERROR'
+    }
     if request.method == 'GET':
-        re_name = request.GET.get('name');
-        re_pass = request.GET.get('pass');
+        re_name = request.GET.get('name')
+        re_pass = request.GET.get('pass')
         User_obj = User.objects.filter(user_id=re_name,user_pass=re_pass)
         Dev_obj = Derive.objects.filter(user=re_name)
         devs = []
@@ -75,6 +78,50 @@ def check(request):
     #     '诊断': '上呼吸道感染',
     # }
     return HttpResponse(json.dumps(data))
+
+def getAllData(request):
+
+    if request.method == 'GET':
+        # re_name = request.GET.get('name')
+        re_devid = request.GET.get('devid')
+        # Dev_obj = Derive.objects.filter(dev_id=re_devid)
+        Data_obj = Data.objects.filter(dev=re_devid)
+        datas = []
+        if len(Data_obj)!=0:
+            for data in Data_obj:
+                if data.isDelete==0:
+                    datas.append({'dev_id':data.dev_id,'weideg':data.weideg,'jingdeg':data.jingdeg,'GPSdate':data.GPSdate.strftime('%Y-%m-%d %H:%M:%S'),'date':data.date.strftime('%Y-%m-%d %H:%M:%S')})
+        redata = {
+            'code': 'OK',
+            'datas': datas,
+            'length':len(datas)
+        }
+    else:
+        redata = {
+            'code': 'ERROR'
+        }
+    return HttpResponse(json.dumps(redata))
+
+
+def getLastData(request):
+
+    if request.method == 'GET':
+        re_devid = request.GET.get('devid')
+        Data_obj = Data.objects.filter(dev=re_devid,isDelete=0).order_by('GPSdate').last()
+        datas = []
+        if Data_obj:
+            datas.append({'dev_id':Data_obj.dev_id,'weideg':Data_obj.weideg,'jingdeg':Data_obj.jingdeg,'GPSdate':Data_obj.GPSdate.strftime('%Y-%m-%d %H:%M:%S'),'date':Data_obj.date.strftime('%Y-%m-%d %H:%M:%S')})
+        redata = {
+            'code': 'OK',
+            'datas': datas,
+            'length':len(datas)
+        }
+    else:
+        redata = {
+            'code': 'ERROR'
+        }
+    return HttpResponse(json.dumps(redata))
+
 
 def index03(request):
     return None
