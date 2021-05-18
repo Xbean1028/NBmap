@@ -3,12 +3,13 @@ from django.shortcuts import render
 from mapwebapp.models import User, Derive,Data,Setting
 from rest_framework import viewsets
 import json
+import datetime
 from .serializers import UserSerializer, DeriveSerializer,DataSerializer,SettingSerializer
 from django.views.decorators.csrf import csrf_exempt
 # @csrf_exempt
 
 # Create your views here.
-
+#API serializers
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -17,11 +18,11 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
-#登录界面
+#登录界面  已弃用##########################
 def login(request):
     return render(request, 'login/login.html')
 
-#用户登录验证
+#用户登录验证 已弃用##########################
 def checking(request):
     username=request.POST.get('name')
     pwd=request.POST.get('password')
@@ -46,7 +47,8 @@ def checking(request):
     #     print(otherStyleTime1)
     #     print(otherStyleTime2)
     return render(request, 'mapwebapp/03-index.html')
-
+###############################################################################
+#用户登录验证
 def check(request):
     data = {
         'code': 'ERROR'
@@ -71,21 +73,15 @@ def check(request):
                 'code': 'ERROR'
             }
 
-    # data = {
-    #     'patient_name': '张三',
-    #     'age': '25',
-    #     'patient_id': '19000347',
-    #     '诊断': '上呼吸道感染',
-    # }
     return HttpResponse(json.dumps(data))
-
+#获取所有数据--Dev选择，默认300条
 def getAllData(request):
 
     if request.method == 'GET':
         # re_name = request.GET.get('name')
         re_devid = request.GET.get('devid')
         # Dev_obj = Derive.objects.filter(dev_id=re_devid)
-        Data_obj = Data.objects.filter(dev=re_devid)
+        Data_obj = Data.objects.filter(dev=re_devid,isDelete=0).order_by('-GPSdate')[0:300]
         datas = []
         if len(Data_obj)!=0:
             for data in Data_obj:
@@ -102,7 +98,47 @@ def getAllData(request):
         }
     return HttpResponse(json.dumps(redata))
 
+#获取所有数据--Dev+Date选择，默认300条
+def getAllDateData(request):
 
+    if request.method == 'GET':
+        # re_name = request.GET.get('name')
+        re_devid = request.GET.get('devid')
+        re_start = request.GET.get('valuedate1')
+        re_stop = request.GET.get('valuedate2')
+        #re_start = re_date[2:12]
+        re_starts = re_start.split(',')
+        re_starts = list(map(int, re_starts))
+        #re_stop = re_date[15:25]
+        re_stops = re_stop.split(',')
+        re_stops = list(map(int, re_stops))
+        print(re_start)
+        start = datetime.date(re_starts[0],re_starts[1],re_starts[2])
+        end = datetime.date(re_stops[0],re_stops[1],re_stops[2])+datetime.timedelta(days=1)#加一天
+        print(start)
+        #Data_obj = Data.objects.filter(dev=re_devid,isDelete=0).order_by('-GPSdate')[0:300]
+        #User.object.filter(start_time__range=(start_, end_))
+        Data_obj = Data.objects.filter(dev=re_devid, isDelete=0,GPSdate__range=(start, end)).order_by('-GPSdate')
+        datas = []
+        if len(Data_obj)!=0:
+            for data in Data_obj:
+                if data.isDelete==0:
+                    datas.append({'dev_id':data.dev_id,'weideg':data.weideg,'jingdeg':data.jingdeg,'GPSdate':data.GPSdate.strftime('%Y-%m-%d %H:%M:%S'),'date':data.date.strftime('%Y-%m-%d %H:%M:%S')})
+        redata = {
+            'code': 'OK',
+            'datas': datas,
+            'length':len(datas),
+            'start':start.strftime('%Y-%m-%d %H:%M:%S'),
+            'end':end.strftime('%Y-%m-%d %H:%M:%S')
+        }
+    else:
+        redata = {
+            'code': 'ERROR'
+        }
+    return HttpResponse(json.dumps(redata))
+
+
+#获取最新数据--一条
 def getLastData(request):
 
     if request.method == 'GET':
@@ -121,7 +157,7 @@ def getLastData(request):
             'code': 'ERROR'
         }
     return HttpResponse(json.dumps(redata))
-
+#用户信息请求
 def getUserInfo(request):
 
     if request.method == 'GET':
@@ -140,7 +176,7 @@ def getUserInfo(request):
             'code': 'ERROR'
         }
     return HttpResponse(json.dumps(redata))
-
+#设备信息请求
 def getDevInfo(request):
 
     if request.method == 'GET':
