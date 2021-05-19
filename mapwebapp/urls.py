@@ -12,5 +12,7 @@ urlpatterns = [
     url('getLastData',views.getLastData),
     url('getUserInfo',views.getUserInfo),
     url('getDevInfo',views.getDevInfo),
-    url('getAllDateData',views.getAllDateData)
+    url('getAllDateData',views.getAllDateData),
+    url('getCircle',views.getCircle),
+    url('saveCircle',views.saveCircle)
 ]

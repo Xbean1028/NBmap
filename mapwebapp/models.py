@@ -65,6 +65,10 @@ class Setting(models.Model):
     y1 = models.CharField('y1', max_length=64, null=False)
     x2 = models.CharField('x2', max_length=64, null=False)
     y2 = models.CharField('y2', max_length=64, null=False)
+    # NEQ = models.CharField('NEQ', max_length=64, null=False)
+    # NER = models.CharField('NER', max_length=64, null=False)
+    # SWQ = models.CharField('SWQ', max_length=64, null=False)
+    # SWR = models.CharField('SWR', max_length=64, null=False)
     # 时间自动添加
     date = models.DateTimeField('修改时间',null=False,auto_now=True)
     isDelete = models.IntegerField('是否有效', choices=ISDELETE, default=0)

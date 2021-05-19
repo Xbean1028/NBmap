@@ -157,6 +157,65 @@ def getLastData(request):
             'code': 'ERROR'
         }
     return HttpResponse(json.dumps(redata))
+
+#获取电子围栏
+def getCircle(request):
+    if request.method == 'GET':
+        re_devid = request.GET.get('devid')
+        Setting_obj = Setting.objects.filter(dev=re_devid).last()
+        datas = []
+        if Setting_obj:
+            datas.append({'dev_id': Setting_obj.dev.dev_id, 'x1': Setting_obj.x1, 'y1': Setting_obj.y1, 'x2': Setting_obj.x2,
+                          'y2': Setting_obj.y2, 'insert_time': Setting_obj.date.strftime('%Y-%m-%d %H:%M:%S'), 'isDelete': Setting_obj.isDelete})
+            redata = {
+                'code': 'OK',
+                'datas': datas,
+            }
+        else:
+            redata = {
+                'code': 'NULL'
+            }
+    else:
+        redata = {
+            'code': 'ERROR'
+        }
+    return HttpResponse(json.dumps(redata))
+
+
+
+#保存电子围栏
+def saveCircle(request):
+    if request.method == 'GET':
+        re_devid = request.GET.get('devid')
+        NEQ = request.GET.get('NEQ')
+        NER = request.GET.get('NER')
+        SWQ = request.GET.get('SWQ')
+        SWR = request.GET.get('SWR')
+
+        Setting_obj = Setting.objects.filter(dev=re_devid).last()
+        Dev_obj = Derive.objects.filter(dev_id=re_devid).last()
+        datas = []
+        if Setting_obj:
+            Setting_obj.x1 = NEQ
+            Setting_obj.y1 = NER
+            Setting_obj.x2 = SWQ
+            Setting_obj.y2 = SWR
+            Setting_obj.save()
+        else:
+            Setting_obj = Setting(dev= Dev_obj,x1=NEQ,y1=NER,x2=SWQ,y2=SWR)
+            Setting_obj.save()
+        Dev_obj = Derive.objects.filter(dev_id=re_devid)
+        datas.append({'dev_id': Setting_obj.dev.dev_id,'x1':Setting_obj.x1,'y1':Setting_obj.y1,'x2':Setting_obj.x2,'y2':Setting_obj.y2,'insert_time':Setting_obj.date.strftime('%Y-%m-%d %H:%M:%S'),'isDelete':Setting_obj.isDelete})
+        redata = {
+            'code': 'OK',
+            'datas': datas,
+        }
+    else:
+        redata = {
+            'code': 'ERROR'
+        }
+    return HttpResponse(json.dumps(redata))
+
 #用户信息请求
 def getUserInfo(request):
 
