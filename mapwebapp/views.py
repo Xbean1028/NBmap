@@ -1,3 +1,4 @@
+import requests
 from django.http import HttpResponse
 from django.shortcuts import render
 from mapwebapp.models import User, Derive,Data,Setting
@@ -7,6 +8,29 @@ import datetime
 from .serializers import UserSerializer, DeriveSerializer,DataSerializer,SettingSerializer
 from django.views.decorators.csrf import csrf_exempt
 # @csrf_exempt
+# from django.dispatch import receiver
+# from django.db.models.signals import post_save
+#
+# @receiver(post_save, sender=Data)  # post_delete指定信号触发类型，sender指定到具体对象
+# def my_signal(sender, instance, **kwargs):  # instance表示被  的对象
+#     print("my_signal")
+#     re_devid = kwargs["dev"]
+#     re_jing = kwargs["jing"]
+#     re_wei = kwargs["wei"]
+#     re_GPSdate = kwargs["GPSdate"]
+#     re_date = kwargs["date"]
+#     re_isDelete = kwargs["isDelete"]
+#     Setting_obj = Setting.objects.filter(dev=re_devid).last()
+#     NEQ = Setting_obj.x1
+#     NER = Setting_obj.y1
+#     SWQ = Setting_obj.x2
+#     SWR = Setting_obj.y2
+#     print(sender, instance)
+
+# receiver - 将连接到此信号的回调函数。回调函数名，不带括号
+# sender - 指定从中接收信号的特定发送方。
+# weak - Django默认将信号处理程序存储为弱引用。因此，如果您的接收器是本地功能，它可能被垃圾收集。为了防止这种情况，请weak=False在调用信号connect()方法时通过。
+# dispatch_uid - 在可能发送重复信号的情况下信号接收器的唯一标识符。
 
 # Create your views here.
 #API serializers
@@ -49,7 +73,7 @@ def checking(request):
     return render(request, 'mapwebapp/03-index.html')
 ###############################################################################
 #用户登录验证
-def check(request):
+def checklogin(request):
     data = {
         'code': 'ERROR'
     }
@@ -70,7 +94,8 @@ def check(request):
             }
         else:
             data = {
-                'code': 'ERROR'
+                'code': 'ERROR',
+                'from':'check'
             }
 
     return HttpResponse(json.dumps(data))
@@ -94,7 +119,8 @@ def getAllData(request):
         }
     else:
         redata = {
-            'code': 'ERROR'
+            'code': 'ERROR',
+            'from':'getAllData'
         }
     return HttpResponse(json.dumps(redata))
 
@@ -133,7 +159,8 @@ def getAllDateData(request):
         }
     else:
         redata = {
-            'code': 'ERROR'
+            'code': 'ERROR',
+            'from':'getAllDateData'
         }
     return HttpResponse(json.dumps(redata))
 
@@ -154,7 +181,8 @@ def getLastData(request):
         }
     else:
         redata = {
-            'code': 'ERROR'
+            'code': 'ERROR',
+            'from':'getLastData'
         }
     return HttpResponse(json.dumps(redata))
 
@@ -177,7 +205,8 @@ def getCircle(request):
             }
     else:
         redata = {
-            'code': 'ERROR'
+            'code': 'ERROR',
+            'from':'getCircle'
         }
     return HttpResponse(json.dumps(redata))
 
@@ -212,7 +241,61 @@ def saveCircle(request):
         }
     else:
         redata = {
-            'code': 'ERROR'
+            'code': 'ERROR',
+            'from':'saveCircle'
+        }
+    return HttpResponse(json.dumps(redata))
+
+#电子围栏判断
+def somecheckCircle(request):
+    Setting_objs = Setting.objects.filter(isDelete=0)
+    datas = []
+
+    print(len(Setting_objs))
+    if len(Setting_objs) != 0:
+        for Setting_obj in Setting_objs:
+            dev_obj = Setting_obj.dev
+            NEQ = Setting_obj.x1
+            NER = Setting_obj.y1
+            SWQ = Setting_obj.x2
+            SWR = Setting_obj.y2
+            #dev_obj = Derive.objects.filter(dev_id = dev_obj.dev_id).first()
+            user_obj = dev_obj.user
+            user_email = user_obj.user_eamil
+            Data_obj = Data.objects.filter(dev=dev_obj, isDelete=0).order_by('GPSdate').last()
+            now_wei = Data_obj.weideg
+            now_jing = Data_obj.jingdeg
+
+            try:
+                response = requests.get(
+                    'https://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + str(now_jing) + "," + str(
+                        now_wei) + '&coordsys=gps&output=json&key=a94ff09e16b37f47479fd113d3afd074')
+                gaode = json.loads(response.text)["locations"].split(",")
+                gaode_jing = gaode[0]
+                gaode_wei = gaode[1]
+            except Exception as e:
+                print("高德经纬度获取出错")
+                # print('https://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + str(now_jing) + "," + str(
+                #         now_wei) + '&coordsys=gps&output=json&key=a94ff09e16b37f47479fd113d3afd074')
+
+            if gaode_wei<=NEQ and gaode_wei>=SWQ and gaode_jing<=NER and gaode_jing>=SWR:
+                Flag = True
+            else:
+                Flag = False
+            datas.append(
+                {'dev_id': dev_obj.dev_id, 'NEQ': NEQ, 'NER': NER, 'SWQ': SWQ,
+                 'SWR': SWR, 'user_email': user_email,'now_wei': now_wei,'now_jing':now_jing,
+                 'gaode_wei':gaode_wei,'gaode_jing':gaode_jing,'Flag':Flag})
+
+        redata = {
+            'code': 'OK',
+            'datas': datas,
+        }
+    else:
+        redata = {
+            'code': 'ERROR',
+            'test':"12",
+            'from':'somecheckCircle'
         }
     return HttpResponse(json.dumps(redata))
 
@@ -232,7 +315,8 @@ def getUserInfo(request):
         }
     else:
         redata = {
-            'code': 'ERROR'
+            'code': 'ERROR',
+            'from':'getUserInfo'
         }
     return HttpResponse(json.dumps(redata))
 #设备信息请求
@@ -253,7 +337,8 @@ def getDevInfo(request):
         }
     else:
         redata = {
-            'code': 'ERROR'
+            'code': 'ERROR',
+            'from':'getDevInfo'
         }
     return HttpResponse(json.dumps(redata))
 

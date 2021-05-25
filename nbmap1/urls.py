@@ -30,6 +30,7 @@ urlpatterns = [
     path('', mapwebapp.views.login),
     # path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
+    #path('signal/', views.my_signal),
     url('mapwebapp', include('mapwebapp.urls'))
     # ,
     # url('mapwebapp',include('mapwebapp.urls'))

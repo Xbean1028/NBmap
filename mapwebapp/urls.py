@@ -7,12 +7,14 @@ from mapwebapp import views
 urlpatterns = [
     url('checking', views.checking),
     url('index03',views.index03),
-    url('check',views.check),
+    url('checklogin',views.checklogin),
     url('getAllData',views.getAllData),
     url('getLastData',views.getLastData),
     url('getUserInfo',views.getUserInfo),
     url('getDevInfo',views.getDevInfo),
     url('getAllDateData',views.getAllDateData),
     url('getCircle',views.getCircle),
-    url('saveCircle',views.saveCircle)
+    url('somecheckCircle',views.somecheckCircle),
+    url('saveCircle',views.saveCircle),
+
 ]
