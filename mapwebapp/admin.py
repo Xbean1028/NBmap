@@ -12,7 +12,7 @@ class UserAdmin(admin.ModelAdmin):
     # fields = ('user_id', 'user_name', 'user_pass','user_eamil', 'user_tel', 'isDelete')
     # fields = (('user_id', 'user_name'), 'user_pass')
     # empty_value_display = '-empty-'
-    list_display= ('user_id', 'user_name', 'user_pass','user_eamil', 'user_tel', 'isDelete')
+    list_display= ('user_id', 'user_name', 'user_pass','user_email', 'user_tel', 'isDelete')
     list_filter = ('user_id', 'isDelete')
     # readonly_fields = ('user_id',)
     search_fields = ['user_name']
@@ -37,7 +37,7 @@ class DataAdmin(admin.ModelAdmin):
 @admin.register(Setting)
 class SettingAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
-    list_display= ('dev', 'x1', 'y1','x2', 'y2', 'date','isDelete')
+    list_display= ('dev', 'NEQ', 'NER','SWQ', 'SWR', 'date','isDelete')
     list_filter = ('dev_id', 'isDelete')
     # readonly_fields = ('user_id',)
     search_fields = ['dev_id']

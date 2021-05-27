@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44595143-e49a-459c-946d-94ddb7ad550b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mapwebapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mapwebapp/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mapwebapp/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/mapwebapp/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mapwebapp/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/mapwebapp/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mapwebapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/mapwebapp/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mapwebapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mapwebapp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/nbmap1/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/nbmap1/settings.py" afterDir="false" />
     </list>
@@ -33,8 +34,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nbmap1/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1273">
-              <caret line="68" column="39" selection-start-line="68" selection-start-column="39" selection-end-line="68" selection-end-column="39" />
+            <state relative-caret-position="-277">
+              <caret line="100" column="22" selection-start-line="100" selection-start-column="22" selection-end-line="100" selection-end-column="22" />
               <folding>
                 <element signature="e#307#316#0" expanded="true" />
               </folding>
@@ -42,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mapwebapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="318" column="19" selection-start-line="318" selection-start-column="4" selection-end-line="318" selection-end-column="19" />
+            <state relative-caret-position="361">
+              <caret line="215" column="138" selection-start-line="215" selection-start-column="127" selection-end-line="215" selection-end-column="138" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -54,7 +55,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mapwebapp/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="361">
@@ -78,8 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mapwebapp/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="10" column="33" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+            <state relative-caret-position="741">
+              <caret line="39" column="50" selection-start-line="39" selection-start-column="50" selection-end-line="39" selection-end-column="50" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -90,8 +91,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mapwebapp/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="27" column="14" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="14" />
+            <state relative-caret-position="217">
+              <caret line="69" column="31" selection-start-line="69" selection-start-column="28" selection-end-line="69" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -115,6 +116,8 @@
       <find>mapwebapp</find>
       <find>USE_TZ</find>
       <find>checkCircle</find>
+      <find>eam</find>
+      <find>x1</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -132,14 +135,14 @@
         <option value="$PROJECT_DIR$/templates/login/login.html" />
         <option value="$PROJECT_DIR$/manage.py" />
         <option value="D:/environment/anaconda3/Lib/site-packages/django/db/backends/mysql/operations.py" />
-        <option value="$PROJECT_DIR$/mapwebapp/admin.py" />
         <option value="$PROJECT_DIR$/mapwebapp/serializers.py" />
         <option value="$PROJECT_DIR$/Readme.md" />
-        <option value="$PROJECT_DIR$/mapwebapp/models.py" />
         <option value="$PROJECT_DIR$/nbmap1/urls.py" />
-        <option value="$PROJECT_DIR$/nbmap1/settings.py" />
-        <option value="$PROJECT_DIR$/mapwebapp/views.py" />
         <option value="$PROJECT_DIR$/mapwebapp/urls.py" />
+        <option value="$PROJECT_DIR$/mapwebapp/models.py" />
+        <option value="$PROJECT_DIR$/mapwebapp/admin.py" />
+        <option value="$PROJECT_DIR$/mapwebapp/views.py" />
+        <option value="$PROJECT_DIR$/nbmap1/settings.py" />
       </list>
     </option>
   </component>
@@ -155,43 +158,25 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="nbmap1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="nbmap1" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="nbmap1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="nbmap1" type="462c0819:PsiDirectoryNode" />
-              <item name="mapwebapp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="nbmap1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="nbmap1" type="462c0819:PsiDirectoryNode" />
-              <item name="nbmap1" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="nbmap1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="nbmap1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
+              <item name="NBmap" type="b2602c69:ProjectViewProjectNode" />
+              <item name="NBmap" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/static/mapwebapp/css" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="editing.templates" />
@@ -276,6 +261,7 @@
       <workItem from="1621940510815" duration="8145000" />
       <workItem from="1622004130234" duration="5301000" />
       <workItem from="1622094329465" duration="1948000" />
+      <workItem from="1622101759280" duration="3059000" />
     </task>
     <task id="LOCAL-00001" summary="init+admin">
       <created>1620277786401</created>
@@ -288,7 +274,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89959000" />
+    <option name="totallyTimeSpent" value="93018000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -301,9 +287,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="848" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23525469" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.117292225" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -516,16 +501,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nbmap1/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1273">
-          <caret line="68" column="39" selection-start-line="68" selection-start-column="39" selection-end-line="68" selection-end-column="39" />
-          <folding>
-            <element signature="e#307#316#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/admin/simpleui-x/css/index.less">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4484">
@@ -535,27 +510,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mapwebapp/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="10" column="33" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+        <state relative-caret-position="741">
+          <caret line="39" column="50" selection-start-line="39" selection-start-column="50" selection-end-line="39" selection-end-column="50" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mapwebapp/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="27" column="14" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mapwebapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="318" column="19" selection-start-line="318" selection-start-column="4" selection-end-line="318" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -566,6 +524,33 @@
           <caret line="19" column="14" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mapwebapp/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="69" column="31" selection-start-line="69" selection-start-column="28" selection-end-line="69" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nbmap1/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-277">
+          <caret line="100" column="22" selection-start-line="100" selection-start-column="22" selection-end-line="100" selection-end-column="22" />
+          <folding>
+            <element signature="e#307#316#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mapwebapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="215" column="138" selection-start-line="215" selection-start-column="127" selection-end-line="215" selection-end-column="138" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>

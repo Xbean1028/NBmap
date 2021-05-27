@@ -11,29 +11,6 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 # @csrf_exempt
-# from django.dispatch import receiver
-# from django.db.models.signals import post_save
-#
-# @receiver(post_save, sender=Data)  # post_delete指定信号触发类型，sender指定到具体对象
-# def my_signal(sender, instance, **kwargs):  # instance表示被  的对象
-#     print("my_signal")
-#     re_devid = kwargs["dev"]
-#     re_jing = kwargs["jing"]
-#     re_wei = kwargs["wei"]
-#     re_GPSdate = kwargs["GPSdate"]
-#     re_date = kwargs["date"]
-#     re_isDelete = kwargs["isDelete"]
-#     Setting_obj = Setting.objects.filter(dev=re_devid).last()
-#     NEQ = Setting_obj.x1
-#     NER = Setting_obj.y1
-#     SWQ = Setting_obj.x2
-#     SWR = Setting_obj.y2
-#     print(sender, instance)
-
-# receiver - 将连接到此信号的回调函数。回调函数名，不带括号
-# sender - 指定从中接收信号的特定发送方。
-# weak - Django默认将信号处理程序存储为弱引用。因此，如果您的接收器是本地功能，它可能被垃圾收集。为了防止这种情况，请weak=False在调用信号connect()方法时通过。
-# dispatch_uid - 在可能发送重复信号的情况下信号接收器的唯一标识符。
 
 # Create your views here.
 #API serializers
@@ -196,8 +173,8 @@ def getCircle(request):
         Setting_obj = Setting.objects.filter(dev=re_devid).last()
         datas = []
         if Setting_obj:
-            datas.append({'dev_id': Setting_obj.dev.dev_id, 'x1': Setting_obj.x1, 'y1': Setting_obj.y1, 'x2': Setting_obj.x2,
-                          'y2': Setting_obj.y2, 'insert_time': Setting_obj.date.strftime('%Y-%m-%d %H:%M:%S'), 'isDelete': Setting_obj.isDelete})
+            datas.append({'dev_id': Setting_obj.dev.dev_id, 'NEQ': Setting_obj.NEQ, 'NER': Setting_obj.NER, 'SWQ': Setting_obj.SWQ,
+                          'SWR': Setting_obj.SWR, 'insert_time': Setting_obj.date.strftime('%Y-%m-%d %H:%M:%S'), 'isDelete': Setting_obj.isDelete})
             redata = {
                 'code': 'OK',
                 'datas': datas,
@@ -228,15 +205,15 @@ def saveCircle(request):
         Dev_obj = Derive.objects.filter(dev_id=re_devid).last()
         datas = []
         if Setting_obj:
-            Setting_obj.x1 = NEQ
-            Setting_obj.y1 = NER
-            Setting_obj.x2 = SWQ
-            Setting_obj.y2 = SWR
+            Setting_obj.NEQ = NEQ
+            Setting_obj.NER = NER
+            Setting_obj.SWQ = SWQ
+            Setting_obj.SWR = SWR
             Setting_obj.save()
         else:
-            Setting_obj = Setting(dev= Dev_obj,x1=NEQ,y1=NER,x2=SWQ,y2=SWR)
+            Setting_obj = Setting(dev= Dev_obj,NEQ=NEQ,NER=NER,SWQ=SWQ,SWR=SWR)
             Setting_obj.save()
-        datas.append({'dev_id': Setting_obj.dev.dev_id,'x1':Setting_obj.x1,'y1':Setting_obj.y1,'x2':Setting_obj.x2,'y2':Setting_obj.y2,'insert_time':Setting_obj.date.strftime('%Y-%m-%d %H:%M:%S'),'isDelete':Setting_obj.isDelete})
+        datas.append({'dev_id': Setting_obj.dev.dev_id,'NEQ':Setting_obj.NEQ,'NER':Setting_obj.NER,'SWQ':Setting_obj.SWQ,'SWR':Setting_obj.SWR,'insert_time':Setting_obj.date.strftime('%Y-%m-%d %H:%M:%S'),'isDelete':Setting_obj.isDelete})
         redata = {
             'code': 'OK',
             'datas': datas,
@@ -257,13 +234,13 @@ def somecheckCircle(request):
     if len(Setting_objs) != 0:
         for Setting_obj in Setting_objs:
             dev_obj = Setting_obj.dev
-            NEQ = Setting_obj.x1
-            NER = Setting_obj.y1
-            SWQ = Setting_obj.x2
-            SWR = Setting_obj.y2
+            NEQ = Setting_obj.NEQ
+            NER = Setting_obj.NER
+            SWQ = Setting_obj.SWQ
+            SWR = Setting_obj.SWR
             #dev_obj = Derive.objects.filter(dev_id = dev_obj.dev_id).first()
             user_obj = dev_obj.user
-            user_email = user_obj.user_eamil
+            user_email = user_obj.user_email
             Data_obj = Data.objects.filter(dev=dev_obj, isDelete=0).order_by('GPSdate').last()
             if Data_obj:
                 now_wei = Data_obj.weideg
@@ -324,13 +301,13 @@ def timecheckCircle():
     if len(Setting_objs) != 0:
         for Setting_obj in Setting_objs:
             dev_obj = Setting_obj.dev
-            NEQ = Setting_obj.x1
-            NER = Setting_obj.y1
-            SWQ = Setting_obj.x2
-            SWR = Setting_obj.y2
+            NEQ = Setting_obj.NEQ
+            NER = Setting_obj.NER
+            SWQ = Setting_obj.SWQ
+            SWR = Setting_obj.SWR
             #dev_obj = Derive.objects.filter(dev_id = dev_obj.dev_id).first()
             user_obj = dev_obj.user
-            user_email = user_obj.user_eamil
+            user_email = user_obj.user_email
             Data_obj = Data.objects.filter(dev=dev_obj, isDelete=0).order_by('GPSdate').last()
             if Data_obj:
                 now_wei = Data_obj.weideg
@@ -421,7 +398,7 @@ def getUserInfo(request):
         User_obj = User.objects.filter(user_id=re_name,isDelete=0).first()
         datas = []
         if User_obj:
-            datas.append({'user_id':User_obj.user_id,'user_name':User_obj.user_name,'user_email':User_obj.user_eamil,'user_tel':User_obj.user_tel,'isDelete':User_obj.isDelete})
+            datas.append({'user_id':User_obj.user_id,'user_name':User_obj.user_name,'user_email':User_obj.user_email,'user_tel':User_obj.user_tel,'isDelete':User_obj.isDelete})
         redata = {
             'code': 'OK',
             'datas': datas,

@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'nbmap1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'nbmap1',
+        'NAME':'nbmap2',
         'USER':'root',
         'PASSWORD':'123456',
         'HOST':'localhost',

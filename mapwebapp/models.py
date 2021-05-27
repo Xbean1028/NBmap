@@ -25,7 +25,7 @@ class User(models.Model):
     user_id=models.CharField('用户id',max_length=64,null=False,unique=True,primary_key=True)
     user_pass=models.CharField('用户密码',max_length=64,null=False)
     user_name=models.CharField('用户名',max_length=64,null=False)
-    user_eamil=models.EmailField('用户Email',null=False)
+    user_email=models.EmailField('用户Email',null=False)
     user_tel=models.CharField('用户Tel',max_length=64,null=True)
     isDelete=models.IntegerField('是否有效',choices=ISDELETE,default=0)
 
@@ -61,14 +61,14 @@ class Data(models.Model):
 
 class Setting(models.Model):
     dev = models.ForeignKey(Derive, verbose_name='设备id', on_delete=models.CASCADE)
-    x1 = models.CharField('x1', max_length=64, null=False)
-    y1 = models.CharField('y1', max_length=64, null=False)
-    x2 = models.CharField('x2', max_length=64, null=False)
-    y2 = models.CharField('y2', max_length=64, null=False)
-    # NEQ = models.CharField('NEQ', max_length=64, null=False)
-    # NER = models.CharField('NER', max_length=64, null=False)
-    # SWQ = models.CharField('SWQ', max_length=64, null=False)
-    # SWR = models.CharField('SWR', max_length=64, null=False)
+    # x1 = models.CharField('x1', max_length=64, null=False)
+    # y1 = models.CharField('y1', max_length=64, null=False)
+    # x2 = models.CharField('x2', max_length=64, null=False)
+    # y2 = models.CharField('y2', max_length=64, null=False)
+    NEQ = models.CharField('NEQ', max_length=64, null=False)
+    NER = models.CharField('NER', max_length=64, null=False)
+    SWQ = models.CharField('SWQ', max_length=64, null=False)
+    SWR = models.CharField('SWR', max_length=64, null=False)
     # 时间自动添加
     date = models.DateTimeField('修改时间',null=False,auto_now=True)
     isDelete = models.IntegerField('是否有效', choices=ISDELETE, default=0)
