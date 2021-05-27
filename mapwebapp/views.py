@@ -6,6 +6,9 @@ from rest_framework import viewsets
 import json
 import datetime
 from .serializers import UserSerializer, DeriveSerializer,DataSerializer,SettingSerializer
+#email
+from django.conf import settings
+from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 # @csrf_exempt
 # from django.dispatch import receiver
@@ -233,7 +236,6 @@ def saveCircle(request):
         else:
             Setting_obj = Setting(dev= Dev_obj,x1=NEQ,y1=NER,x2=SWQ,y2=SWR)
             Setting_obj.save()
-        Dev_obj = Derive.objects.filter(dev_id=re_devid)
         datas.append({'dev_id': Setting_obj.dev.dev_id,'x1':Setting_obj.x1,'y1':Setting_obj.y1,'x2':Setting_obj.x2,'y2':Setting_obj.y2,'insert_time':Setting_obj.date.strftime('%Y-%m-%d %H:%M:%S'),'isDelete':Setting_obj.isDelete})
         redata = {
             'code': 'OK',
@@ -246,7 +248,7 @@ def saveCircle(request):
         }
     return HttpResponse(json.dumps(redata))
 
-#电子围栏判断
+#定时电子围栏判断
 def somecheckCircle(request):
     Setting_objs = Setting.objects.filter(isDelete=0)
     datas = []
@@ -263,29 +265,43 @@ def somecheckCircle(request):
             user_obj = dev_obj.user
             user_email = user_obj.user_eamil
             Data_obj = Data.objects.filter(dev=dev_obj, isDelete=0).order_by('GPSdate').last()
-            now_wei = Data_obj.weideg
-            now_jing = Data_obj.jingdeg
+            if Data_obj:
+                now_wei = Data_obj.weideg
+                now_jing = Data_obj.jingdeg
 
-            try:
-                response = requests.get(
-                    'https://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + str(now_jing) + "," + str(
-                        now_wei) + '&coordsys=gps&output=json&key=a94ff09e16b37f47479fd113d3afd074')
-                gaode = json.loads(response.text)["locations"].split(",")
-                gaode_jing = gaode[0]
-                gaode_wei = gaode[1]
-            except Exception as e:
-                print("高德经纬度获取出错")
-                # print('https://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + str(now_jing) + "," + str(
-                #         now_wei) + '&coordsys=gps&output=json&key=a94ff09e16b37f47479fd113d3afd074')
+                try:
+                    response = requests.get(
+                        'https://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + str(now_jing) + "," + str(
+                            now_wei) + '&coordsys=gps&output=json&key=a94ff09e16b37f47479fd113d3afd074')
+                    gaode = json.loads(response.text)["locations"].split(",")
+                    gaode_jing = gaode[0]
+                    gaode_wei = gaode[1]
+                except Exception as e:
+                    print("高德经纬度获取出错")
+                    # print('https://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + str(now_jing) + "," + str(
+                    #         now_wei) + '&coordsys=gps&output=json&key=a94ff09e16b37f47479fd113d3afd074')
 
-            if gaode_wei<=NEQ and gaode_wei>=SWQ and gaode_jing<=NER and gaode_jing>=SWR:
-                Flag = True
-            else:
-                Flag = False
-            datas.append(
-                {'dev_id': dev_obj.dev_id, 'NEQ': NEQ, 'NER': NER, 'SWQ': SWQ,
-                 'SWR': SWR, 'user_email': user_email,'now_wei': now_wei,'now_jing':now_jing,
-                 'gaode_wei':gaode_wei,'gaode_jing':gaode_jing,'Flag':Flag})
+                if gaode_wei<=NEQ and gaode_wei>=SWQ and gaode_jing<=NER and gaode_jing>=SWR:
+                    Flag = True
+                else:
+                    Flag = False
+                sendemailflag = "null"
+                if Flag==False:
+                    email = user_email  # 获取邮箱地址
+
+                    subject = 'Bean Map GPS位置警告信息'  # 主题
+                    message = user_obj.user_name+'\r您好，你的设备'+dev_obj.dev_id+'超出电子围栏信息，最新位置时间：'+Data_obj.GPSdate.strftime('%Y-%m-%d %H:%M:%S')+'\n请访问网址 https://map.xubean.top了解详情' # 内容
+                    sender = settings.EMAIL_FROM  # 发送邮箱，已经在settings.py设置，直接导入
+                    receiver = [email]  # 目标邮箱 切记此处只能是列表或元祖
+                    html_message = '<h1>%s</h1>' % message  # 发送html格式
+                    send_mail(subject, message, sender, receiver, html_message=html_message)
+                    sendemailflag = message
+
+                    pass
+                datas.append(
+                    {'dev_id': dev_obj.dev_id, 'NEQ': NEQ, 'NER': NER, 'SWQ': SWQ,
+                     'SWR': SWR, 'user_email': user_email,'now_wei': now_wei,'now_jing':now_jing,
+                     'gaode_wei':gaode_wei,'gaode_jing':gaode_jing,'Flag':Flag,'sendemailflag':sendemailflag})
 
         redata = {
             'code': 'OK',
@@ -294,8 +310,106 @@ def somecheckCircle(request):
     else:
         redata = {
             'code': 'ERROR',
-            'test':"12",
+            'length':len(datas),
             'from':'somecheckCircle'
+        }
+    return HttpResponse(json.dumps(redata))
+
+#定时电子围栏判断
+def timecheckCircle():
+    Setting_objs = Setting.objects.filter(isDelete=0)
+    datas = []
+
+    print(len(Setting_objs))
+    if len(Setting_objs) != 0:
+        for Setting_obj in Setting_objs:
+            dev_obj = Setting_obj.dev
+            NEQ = Setting_obj.x1
+            NER = Setting_obj.y1
+            SWQ = Setting_obj.x2
+            SWR = Setting_obj.y2
+            #dev_obj = Derive.objects.filter(dev_id = dev_obj.dev_id).first()
+            user_obj = dev_obj.user
+            user_email = user_obj.user_eamil
+            Data_obj = Data.objects.filter(dev=dev_obj, isDelete=0).order_by('GPSdate').last()
+            if Data_obj:
+                now_wei = Data_obj.weideg
+                now_jing = Data_obj.jingdeg
+
+                try:
+                    response = requests.get(
+                        'https://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + str(now_jing) + "," + str(
+                            now_wei) + '&coordsys=gps&output=json&key=a94ff09e16b37f47479fd113d3afd074')
+                    gaode = json.loads(response.text)["locations"].split(",")
+                    gaode_jing = gaode[0]
+                    gaode_wei = gaode[1]
+                except Exception as e:
+                    print("高德经纬度获取出错")
+                    # print('https://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + str(now_jing) + "," + str(
+                    #         now_wei) + '&coordsys=gps&output=json&key=a94ff09e16b37f47479fd113d3afd074')
+
+                if gaode_wei<=NEQ and gaode_wei>=SWQ and gaode_jing<=NER and gaode_jing>=SWR:
+                    Flag = True
+                else:
+                    Flag = False
+                sendemailflag = "null"
+                if Flag==False:
+                    email = user_email  # 获取邮箱地址
+
+                    subject = 'Bean Map GPS位置警告信息'  # 主题
+                    message = user_obj.user_name+'\r您好，你的设备'+dev_obj.dev_id+'超出电子围栏信息，最新位置时间：'+Data_obj.GPSdate.strftime('%Y-%m-%d %H:%M:%S')+'\n请访问网址 https://map.xubean.top了解详情' # 内容
+                    sender = settings.EMAIL_FROM  # 发送邮箱，已经在settings.py设置，直接导入
+                    receiver = [email]  # 目标邮箱 切记此处只能是列表或元祖
+                    html_message = '<h1>%s</h1>' % message  # 发送html格式
+                    send_mail(subject, message, sender, receiver, html_message=html_message)
+                    sendemailflag = message
+
+                    pass
+                datas.append(
+                    {'dev_id': dev_obj.dev_id, 'NEQ': NEQ, 'NER': NER, 'SWQ': SWQ,
+                     'SWR': SWR, 'user_email': user_email,'now_wei': now_wei,'now_jing':now_jing,
+                     'gaode_wei':gaode_wei,'gaode_jing':gaode_jing,'Flag':Flag,'sendemailflag':sendemailflag})
+
+        redata = {
+            'code': 'OK',
+            'datas': datas,
+        }
+    else:
+        redata = {
+            'code': 'ERROR',
+            'length':len(datas),
+            'from':'somecheckCircle'
+        }
+    return HttpResponse(json.dumps(redata))
+
+#电子围栏开关
+def switchCircle(request):
+    if request.method == 'GET':
+        re_devid = request.GET.get('devid')
+        re_switch = request.GET.get('switch')
+        Setting_obj = Setting.objects.filter(dev=re_devid).last()
+        datas = []
+        if Setting_obj:
+            if re_switch=='true':
+                save_switch = 0
+            else:
+                save_switch = 1
+            Setting_obj.isDelete = save_switch
+            Setting_obj.save()
+            datas.append({'dev_id': Setting_obj.dev.dev_id, 'switch': re_switch})
+            redata = {
+                'code': 'OK',
+                'datas': datas,
+            }
+        else:
+            redata = {
+                'code': 'NULL'
+            }
+
+    else:
+        redata = {
+            'code': 'ERROR',
+            'from':'switchCircle'
         }
     return HttpResponse(json.dumps(redata))
 
