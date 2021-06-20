@@ -225,7 +225,7 @@ def saveCircle(request):
         }
     return HttpResponse(json.dumps(redata))
 
-#定时电子围栏判断
+#电子围栏判断
 def somecheckCircle(request):
     Setting_objs = Setting.objects.filter(isDelete=0)
     datas = []

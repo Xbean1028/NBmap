@@ -70,7 +70,19 @@ EMAIL_HOST_PASSWORD = 'FIGXSYKMIWKSJXPI'
 #收件人看到的发件人
 EMAIL_FROM = 'Bean Map Test<xubean123@163.com>'
 
-
+# Email
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.163.com'
+# EMAIL_PORT = 465  # 25
+# EMAIL_USE_TLS = False  # 发送的模式
+# EMAIL_USE_SSL = True  # 加密模式  ****** 特别注意 *****
+# # 发送邮件的邮箱
+# EMAIL_HOST_USER = 'xubean123@163.com'
+# # 在邮箱中设置的客户端授权密码
+# EMAIL_HOST_PASSWORD = 'JYFTMLZOEKJMAMQJ'
+# # 收件人看到的发件人
+# EMAIL_FROM = 'Bean Map Test<xubean123@163.com>'
+#
 
 TEMPLATES = [
     {
